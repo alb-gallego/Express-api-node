@@ -39,3 +39,24 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+
+
+const { Pool } = require('pg');
+
+const pool = new Pool({
+  user: 'alberto',
+  host: 'localhost',
+  database: 'databasenode',
+  password: 'alberto',
+  port: 5432,
+});
+
+print('Hola')
+print('Pool')
+pool.query('SELECT NOW()', (err, res) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(res.rows);
+    }
+  });
