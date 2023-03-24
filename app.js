@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var rentalRouter = require('./routes/rentals')
 
 var app = express();
 
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/rentals', rentalRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -40,23 +42,3 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 
-
-const { Pool } = require('pg');
-
-const pool = new Pool({
-  user: 'alberto',
-  host: 'localhost',
-  database: 'databasenode',
-  password: 'alberto',
-  port: 5432,
-});
-
-print('Hola')
-print('Pool')
-pool.query('SELECT NOW()', (err, res) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(res.rows);
-    }
-  });
