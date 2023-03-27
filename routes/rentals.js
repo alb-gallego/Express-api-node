@@ -1,35 +1,48 @@
-const { Pool } = require('pg');
 var express = require('express');
 var router = express.Router();
+const { Pool, Client } = require('pg');
 
-
-const pool = new Pool({
+const config = {
   user: 'postgres',
-  host: 'localhost',
+  host: 'localhost',  
   database: 'databasenode',
   password: 'mysecretpassword',
-  port: 5432,
-});
+  port:5432,
+  ssl: false,
+};
 
-pool.connect();
+const pool = new Client(config);
 
+const peticion =async (req,res)=>{
 
-/* GET users listing. */
-router.get('/rentals', function(req, res, next) {
-  pool.query(
-    `SELECT * FROM rental;`,
+  /* `INSERT INTO rental (id,title,owner,city ,lat ,lng ,category,
+        bedrooms,image,description)
+        VALUES ('grand-old-mansion','Grand Old Mansion','Veruca Salt','San Francisco',
+        37.7749,-122.4194,'Estate',15,'https://upload.wikimedia.org/wikipedia/commons/c/cb/Crane_estate_(5).jpg',
+        'This grand old mansion sits on over 100 acres of rolling hills and dense redwood forests.'
+        );`,*/
+   await     pool.connect();
+
+  await pool.query(`SELECT * FROM rental`
+,
     (err, res) => {
       if (err) {
-        console.error('Error al obtener los rentals', err);
+        console.error('Error al crear la tabla', err);
       } else {
         console.log(res.rows);
-        res.send('respond with a resource');
-
       }
       pool.end();
     }
+    
   );
-});
 
-module.exports = router;
-  
+  res.send('OK');
+
+};
+
+
+router.get('/', peticion);
+
+module.exports = router
+
+
