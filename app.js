@@ -1,5 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
+const cors = require('cors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -9,6 +10,12 @@ var usersRouter = require('./routes/users');
 var rentalRouter = require('./routes/rentals');
 
 var app = express();
+
+//settings
+const whiteList =['http://localhost:4200'];
+app.use(cors({
+  origin: whiteList,
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
