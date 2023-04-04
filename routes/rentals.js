@@ -7,8 +7,8 @@ const { Serializer } = require("jsonapi-serializer");
 const config = {
   user: "postgres",
   //host: 'db',
-  host: "localhost",
-  database: "databasenode",
+  host: "db",
+  database: "postgres",
   password: "mysecretpassword",
   port: 5432,
   ssl: false,

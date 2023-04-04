@@ -1,9 +1,3 @@
-CREATE DATABASE databasenode;
-DROP TABLE IF EXISTS rental;
-\c databasenode;
-
-
-
 CREATE TABLE IF NOT EXISTS rental (
   id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   title VARCHAR(255),
@@ -13,5 +7,8 @@ CREATE TABLE IF NOT EXISTS rental (
   bedrooms INT,
   image VARCHAR(255),
   description VARCHAR(255)
-);`
+);
+
+INSERT INTO rental ( title,owner,city,category,bedrooms,image,description) VALUES 
+('Prueba','Alberto','Sevilla','Community',5,'','descripcion'); 
 
