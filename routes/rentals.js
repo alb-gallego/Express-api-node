@@ -16,10 +16,10 @@ const config = {
 };
   
 const pool = new Pool(config);
-//Init sql script to create table
-//  const fs = require('fs');
-//  const sql = fs.readFileSync('./db/init.sql').toString();
-//  pool.query(sql);
+// //Init sql script to create table
+// const fs = require('fs');
+// const sql = fs.readFileSync('./db/init.sql').toString();
+// pool.query(sql);
 
 //CRUD METHODS
 const getRentals = async (req, res) => {

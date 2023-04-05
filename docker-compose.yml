@@ -5,7 +5,6 @@ services:
     build:
       context: ./
       target: dev
-
     command: npm run start:dev
     ports:
       - "3000:3000"
@@ -39,26 +38,23 @@ services:
       - db:/var/lib/postgresql/data
       - ./db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
 
-  web:
+
+  client:
     container_name: ember_app
     build:
-      context: ./
-      target: dev
-    command: npm start
+      context: ../super-rentals
+    command: npm run start
     ports:
       - "4200:4200"
     environment:
       NODE_ENV: development
-      DEBUG: nodejs-docker-express:*
-  
-    links:
-      - db
+      DEBUG: nodejs-docker-ember:*
     labels:
       - "com.docker.compose.container-number=1"
     depends_on:
       - server
     volumes:
-      - .:/src
+      - .:/ember/src
       - /src/node_modules
 volumes:
   db:
