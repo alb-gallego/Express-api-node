@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  web:
+  server:
     container_name: api_express
     build:
       context: ./
@@ -38,6 +38,28 @@ services:
     volumes: 
       - db:/var/lib/postgresql/data
       - ./db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+  web:
+    container_name: ember_app
+    build:
+      context: ./
+      target: dev
+    command: npm start
+    ports:
+      - "4200:4200"
+    environment:
+      NODE_ENV: development
+      DEBUG: nodejs-docker-express:*
+  
+    links:
+      - db
+    labels:
+      - "com.docker.compose.container-number=1"
+    depends_on:
+      - server
+    volumes:
+      - .:/src
+      - /src/node_modules
 volumes:
   db:
     driver: local

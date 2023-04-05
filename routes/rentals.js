@@ -6,21 +6,27 @@ const { Serializer } = require("jsonapi-serializer");
 
 const config = {
   user: "postgres",
-  //host: 'db',
-  host: "db",
-  database: "postgres",
+  host: 'localhost',
+  //host: "db",
+  //database: 'postgres',
+  database: "databasenode",
   password: "mysecretpassword",
   port: 5432,
   ssl: false,
 };
-
+  
 const pool = new Pool(config);
+//Init sql script to create table
+//  const fs = require('fs');
+//  const sql = fs.readFileSync('./db/init.sql').toString();
+//  pool.query(sql);
 
+//CRUD METHODS
 const getRentals = async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM rental");
 
-    // Serializamos los datos a JSONAPI
+   
     const serializer = new JSONAPISerializer("rentals", {
       attributes: [
         "title",
