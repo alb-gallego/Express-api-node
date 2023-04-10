@@ -149,7 +149,6 @@ const updateRental = async (req, res) => {
     const attributes = data[0].attributes;
 
     try {
-      await pool.connect();
       const response = await pool.query(`UPDATE rental SET
     title='${title}', owner='${owner}', city='${city}', category='${category}', bedrooms=${bedrooms}, image='${image}', description='${description}'
       WHERE rental.id = '${req.params.id}'`);
@@ -182,12 +181,11 @@ const updateRental = async (req, res) => {
 };
 const deleteRental = async (req, res) => {
   try {
-    await pool.connect();
     const response = await pool.query(
       `DELETE FROM rental WHERE rental.id = '${req.params.id}'`
     );
     console.log(response);
-    res.send(`Rental with id ${req.params.id} was deleted.`);
+    //res.send(`Rental with id ${req.params.id} was deleted.`);
   } catch (err) {
     console.error(err);
     res.status(500).send("Error deleting rental");
