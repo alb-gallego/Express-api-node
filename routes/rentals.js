@@ -6,10 +6,12 @@ const { Serializer } = require("jsonapi-serializer");
 
 const config = {
   user: "postgres",
+  //CONFIG FOR LOCAL MACHINE
   host: 'localhost',
+  database: "databasenode",
+  //CONFIG FOR DOCKER COMPOSE
   //host: "db",
   //database: 'postgres',
-  database: "databasenode",
   password: "mysecretpassword",
   port: 5432,
   ssl: false,
