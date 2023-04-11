@@ -7,7 +7,7 @@ const { Serializer } = require("jsonapi-serializer");
 const config = {
   user: "postgres",
   //CONFIG FOR LOCAL MACHINE
-  host: 'localhost',
+  host: "localhost",
   database: "databasenode",
   //CONFIG FOR DOCKER COMPOSE
   //host: "db",
@@ -16,7 +16,7 @@ const config = {
   port: 5432,
   ssl: false,
 };
-  
+
 const pool = new Pool(config);
 // //Init sql script to create table
 // const fs = require('fs');
@@ -28,7 +28,6 @@ const getRentals = async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM rental");
 
-   
     const serializer = new JSONAPISerializer("rentals", {
       attributes: [
         "title",
@@ -82,10 +81,23 @@ const getRentalById = async (req, res) => {
   }
 };
 
+function checkAttributes(attributes, key, errors) {
+  if (attributes[key].length < 5 && key != "category") {
+    errors.push(`${key} length must be greater than 5`);
+  } else if (key === "bedrooms" && attributes[key] <= 0) {
+    errors.push(`${key}  must be greater than 0`);
+  } else if (
+    key === "category" &&
+    (attributes["category"] !== "Community" &&
+      attributes["category"] !== "Standalone")
+  ) {
+    errors.push(`${key}  must be Community or Standalone`);
+  }
+}
+
 const postRental = async (req, res) => {
   if (req.body != null) {
     const { data } = req.body;
-    console.log(req.body);
     const {
       attributes: {
         title,
@@ -98,9 +110,17 @@ const postRental = async (req, res) => {
       },
     } = data[0];
     const attributes = data[0].attributes;
+    errors = [];
+    for (let key in attributes) {
+      checkAttributes(attributes, key, errors);
+    }
+
+    if (errors.length > 0) {
+      res.status(400).json({ errors });
+      return;
+    }
 
     try {
-      await pool.connect();
       const response = await pool.query(`
       INSERT INTO rental (title, owner, city, category, bedrooms, image, description) 
       VALUES ( '${title}', '${owner}', '${city}', '${category}', ${bedrooms}, '${image}', '${description}')
@@ -123,7 +143,7 @@ const postRental = async (req, res) => {
         id: response.rows[0].id,
         ...attributes,
       });
-      console.log(jsonapiData);
+      //console.log(jsonapiData);
       // Enviamos la respuesta como JSONAPI
       res.setHeader("Content-Type", "application/vnd.api+json");
       res.status(200).send({ data: jsonapiData });
@@ -137,7 +157,6 @@ const postRental = async (req, res) => {
 const updateRental = async (req, res) => {
   if (req.body != null) {
     const { data } = req.body;
-    console.log(data[0]);
     const {
       attributes: {
         title,
@@ -150,6 +169,15 @@ const updateRental = async (req, res) => {
       },
     } = data[0];
     const attributes = data[0].attributes;
+    errors = [];
+    for (let key in attributes) {
+      checkAttributes(attributes, key, errors);
+    }
+
+    if (errors.length > 0) {
+      res.status(400).json({ errors });
+      return;
+    }
 
     try {
       const response = await pool.query(`UPDATE rental SET
@@ -172,7 +200,6 @@ const updateRental = async (req, res) => {
         id: data[0].id,
         ...attributes,
       });
-      console.log(jsonapiData);
       // Enviamos la respuesta como JSONAPI
       res.setHeader("Content-Type", "application/vnd.api+json");
       res.status(200).send({ data: jsonapiData });
