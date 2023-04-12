@@ -2,16 +2,15 @@ var express = require("express");
 var router = express.Router();
 const { Pool } = require("pg");
 const JSONAPISerializer = require("jsonapi-serializer").Serializer;
-const { Serializer } = require("jsonapi-serializer");
 
 const config = {
   user: "postgres",
   //CONFIG FOR LOCAL MACHINE
-  host: "localhost",
-  database: "databasenode",
+  // host: "localhost",
+  // database: "databasenode",
   //CONFIG FOR DOCKER COMPOSE
-  //host: "db",
-  //database: 'postgres',
+  host: "db",
+  database: 'postgres',
   password: "mysecretpassword",
   port: 5432,
   ssl: false,
