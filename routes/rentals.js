@@ -82,7 +82,7 @@ const getRentalById = async (req, res) => {
 };
 
 function checkAttributes(attributes, key, errors) {
-  if (attributes[key].length < 5 && key != "category") {
+  if (attributes[key].length < 5 && key !== ("category"||"bedrooms")) {
     errors.push(`${key} length must be greater than 5`);
   } else if (key === "bedrooms" && attributes[key] <= 0) {
     errors.push(`${key}  must be greater than 0`);
