@@ -1,15 +1,10 @@
 FROM node:18-alpine as base
 
+# Establecemos el directorio de trabajo dentro del contenedor
 WORKDIR /src
-COPY package*.json /
-EXPOSE 3000
+COPY package*.json ./
 
-
-
-FROM base as dev
-ENV NODE_ENV=development
-
+# Instalamos las dependencias de Node.js
 RUN npm ci
-COPY --chown=node:node . ./
-USER node
-CMD ["npm", "start"]
+
+
